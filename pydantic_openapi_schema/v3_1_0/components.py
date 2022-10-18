@@ -1,6 +1,8 @@
-from typing import Dict, Optional, Union
+from typing import Dict, Union
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra, Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .callback import Callback
 from .example import Example
@@ -15,7 +17,7 @@ from .schema import Schema
 from .security_scheme import SecurityScheme
 
 
-class Components(BaseModel):
+class Components(PackageBaseModel):
     """Holds a set of reusable objects for different aspects of the OAS.
 
     All objects defined within the components object will have no effect
@@ -23,38 +25,39 @@ class Components(BaseModel):
     outside the components object.
     """
 
-    schemas: Optional[Dict[str, Schema]] = None
+    schemas: Dict[str, Schema] = Field(default_factory=dict)
     """An object to hold reusable [Schema Objects](https://spec.openapis.org/oas/v3.1.0#schemaObject)."""
 
-    responses: Optional[Dict[str, Union[Response, Reference]]] = None
+    responses: Dict[str, Union[Response, Reference]] = Field(default_factory=dict)
     """An object to hold reusable [Response Objects](https://spec.openapis.org/oas/v3.1.0#responseObject)."""
 
-    parameters: Optional[Dict[str, Union[Parameter, Reference]]] = None
+    parameters: Dict[str, Union[Parameter, Reference]] = Field(default_factory=dict)
     """An object to hold reusable [Parameter Objects](https://spec.openapis.org/oas/v3.1.0#parameterObject)."""
 
-    examples: Optional[Dict[str, Union[Example, Reference]]] = None
+    examples: Dict[str, Union[Example, Reference]] = Field(default_factory=dict)
     """An object to hold reusable [Example Objects](https://spec.openapis.org/oas/v3.1.0#exampleObject)."""
 
-    requestBodies: Optional[Dict[str, Union[RequestBody, Reference]]] = None
+    request_bodies: Dict[str, Union[RequestBody, Reference]] = Field(default_factory=dict, alias="requestBodies")
     """An object to hold reusable [Request Body Objects](https://spec.openapis.org/oas/v3.1.0#requestBodyObject)."""
 
-    headers: Optional[Dict[str, Union[Header, Reference]]] = None
+    headers: Dict[str, Union[Header, Reference]] = Field(default_factory=dict)
     """An object to hold reusable [Header Objects](https://spec.openapis.org/oas/v3.1.0#headerObject)."""
 
-    securitySchemes: Optional[Dict[str, Union[SecurityScheme, Reference]]] = None
+    security_schemes: Dict[str, Union[SecurityScheme, Reference]] = Field(default_factory=dict, alias="securitySchemes")
     """An object to hold reusable [Security Scheme Objects](https://spec.openapis.org/oas/v3.1.0#securitySchemeObject)."""
 
-    links: Optional[Dict[str, Union[Link, Reference]]] = None
+    links: Dict[str, Union[Link, Reference]] = Field(default_factory=dict)
     """An object to hold reusable [Link Objects](https://spec.openapis.org/oas/v3.1.0#linkObject)."""
 
-    callbacks: Optional[Dict[str, Union[Callback, Reference]]] = None
+    callbacks: Dict[str, Union[Callback, Reference]] = Field(default_factory=dict)
     """An object to hold reusable [Callback Objects](https://spec.openapis.org/oas/v3.1.0#callbackObject)."""
 
-    pathItems: Optional[Dict[str, Union[PathItem, Reference]]] = None
+    path_items: Dict[str, Union[PathItem, Reference]] = Field(default_factory=dict, alias="pathItems")
     """An object to hold reusable [Path Item Object](https://spec.openapis.org/oas/v3.1.0#pathItemObject)."""
 
     class Config:
         extra = Extra.ignore
+        allow_population_by_field_name = True
         schema_extra = {
             "examples": [
                 {

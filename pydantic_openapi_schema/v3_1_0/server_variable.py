@@ -1,9 +1,11 @@
 from typing import List, Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class ServerVariable(BaseModel):
+class ServerVariable(PackageBaseModel):
     """An object representing a Server Variable for server URL template
     substitution."""
 

@@ -1,9 +1,11 @@
 from typing import Optional
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import Extra, Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class Reference(BaseModel):
+class Reference(PackageBaseModel):
     """A simple object to allow referencing other components in the OpenAPI
     document, internally and externally.
 

@@ -1,7 +1,9 @@
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class PingRequest(BaseModel):
+class PingRequest(PackageBaseModel):
     """Ping Request."""
 
     __schema_name__ = "RenamedPingRequest"
@@ -10,7 +12,7 @@ class PingRequest(BaseModel):
     req_bar: str = Field(description="bar value of the request")
 
 
-class PingResponse(BaseModel):
+class PingResponse(PackageBaseModel):
     """Ping response."""
 
     __schema_name__ = "RenamedPingResponse"

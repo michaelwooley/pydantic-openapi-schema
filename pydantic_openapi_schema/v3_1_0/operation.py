@@ -1,6 +1,8 @@
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra, Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .callback import Callback
 from .external_documentation import ExternalDocumentation
@@ -12,10 +14,10 @@ from .security_requirement import SecurityRequirement
 from .server import Server
 
 
-class Operation(BaseModel):
+class Operation(PackageBaseModel):
     """Describes a single API operation on a path."""
 
-    tags: Optional[List[str]] = None
+    tags: List[str] = Field(default_factory=list)
     """
     A list of tags for API documentation control.
     Tags can be used for logical grouping of operations by resources or any other qualifier.
@@ -32,12 +34,12 @@ class Operation(BaseModel):
     [CommonMark syntax](https://spec.commonmark.org/) MAY be used for rich text representation.
     """
 
-    externalDocs: Optional[ExternalDocumentation] = None
+    external_docs: Optional[ExternalDocumentation] = Field(default=None, alias="externalDocs")
     """
     Additional external documentation for this operation.
     """
 
-    operationId: Optional[str] = None
+    operation_id: Optional[str] = Field(default=None, alias="operationId")
     """
     Unique string used to identify the operation.
     The id MUST be unique among all operations described in the API.
@@ -46,7 +48,7 @@ class Operation(BaseModel):
     therefore, it is RECOMMENDED to follow common programming naming conventions.
     """
 
-    parameters: Optional[List[Union[Parameter, Reference]]] = None
+    parameters: List[Union[Parameter, Reference]] = Field(default_factory=list)
     """
     A list of parameters that are applicable for this operation.
     If a parameter is already defined at the [Path Item](https://spec.openapis.org/oas/v3.1.0#pathItemParameters),
@@ -57,7 +59,7 @@ class Operation(BaseModel):
     that are defined at the [OpenAPI Object's components/parameters](https://spec.openapis.org/oas/v3.1.0#componentsParameters).
     """
 
-    requestBody: Optional[Union[RequestBody, Reference]] = None
+    request_body: Optional[Union[RequestBody, Reference]] = Field(default=None, alias="requestBody")
     """
     The request body applicable for this operation.
 
@@ -69,12 +71,12 @@ class Operation(BaseModel):
     `requestBody` is permitted but does not have well-defined semantics and SHOULD be avoided if possible.
     """
 
-    responses: Optional[Responses] = None
+    responses: Responses = Field(default_factory=dict)
     """
     The list of possible responses as they are returned from executing this operation.
     """
 
-    callbacks: Optional[Dict[str, Union[Callback, Reference]]] = None
+    callbacks: Dict[str, Union[Callback, Reference]] = Field(default_factory=dict)
     """
     A map of possible out-of band callbacks related to the parent operation.
     The key is a unique identifier for the Callback Object.
@@ -89,7 +91,7 @@ class Operation(BaseModel):
     Default value is `false`.
     """
 
-    security: Optional[List[SecurityRequirement]] = None
+    security: List[SecurityRequirement] = Field(default_factory=list)
     """
     A declaration of which security mechanisms can be used for this operation.
     The list of values includes alternative security requirement objects that can be used.
@@ -99,7 +101,7 @@ class Operation(BaseModel):
     To remove a top-level security declaration, an empty array can be used.
     """
 
-    servers: Optional[List[Server]] = None
+    servers: List[Server] = Field(default_factory=list)
     """
     An alternative `server` array to service this operation.
     If an alternative `server` object is specified at the Path Item Object or Root level,
@@ -108,6 +110,7 @@ class Operation(BaseModel):
 
     class Config:
         extra = Extra.ignore
+        allow_population_by_field_name = True
         schema_extra = {
             "examples": [
                 {

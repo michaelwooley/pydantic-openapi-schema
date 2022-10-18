@@ -1,9 +1,11 @@
 from typing import Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class XML(BaseModel):
+class XML(PackageBaseModel):
     """A metadata object that allows for more fine-tuned XML model definitions.
 
     When using arrays, XML element names are *not* inferred (for

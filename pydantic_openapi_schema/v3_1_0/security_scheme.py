@@ -1,12 +1,14 @@
 from typing import Optional, Union
 
-from pydantic import AnyUrl, BaseModel, Extra, Field
+from pydantic import AnyUrl, Extra, Field
 from typing_extensions import Literal
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .oauth_flows import OAuthFlows
 
 
-class SecurityScheme(BaseModel):
+class SecurityScheme(PackageBaseModel):
     """Defines a security scheme that can be used by the operations.
 
     Supported schemes are HTTP authentication,

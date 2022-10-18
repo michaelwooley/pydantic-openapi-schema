@@ -1,9 +1,11 @@
 from typing import Dict, Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class Discriminator(BaseModel):
+class Discriminator(PackageBaseModel):
     """When request bodies or response payloads may be one of a number of
     different schemas, a `discriminator` object can be used to aid in
     serialization, deserialization, and validation.

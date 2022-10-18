@@ -6,7 +6,7 @@ from pydantic_openapi_schema.v3_1_0 import OpenAPI, Operation, PathItem
 
 
 def test_swagger_openapi_v3() -> None:
-    open_api = ExtendedOpenAPI.parse_file("tests/data/swagger_openapi_v3.0.1.json")
+    open_api = ExtendedOpenAPI.parse_file("tests/data/swagger_openapi_v3.1.0.json")
     assert open_api
 
 

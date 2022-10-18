@@ -1,9 +1,11 @@
 from typing import Optional
 
-from pydantic import AnyUrl, BaseModel, Extra
+from pydantic import AnyUrl, Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class License(BaseModel):
+class License(PackageBaseModel):
     """License information for the exposed API."""
 
     name: str

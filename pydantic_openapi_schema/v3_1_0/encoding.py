@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING, Dict, Optional, Union
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .reference import Reference
 
@@ -8,7 +10,7 @@ if TYPE_CHECKING:
     from pydantic_openapi_schema.v3_1_0.header import Header
 
 
-class Encoding(BaseModel):
+class Encoding(PackageBaseModel):
     """A single encoding definition applied to a single schema property."""
 
     contentType: Optional[str] = None

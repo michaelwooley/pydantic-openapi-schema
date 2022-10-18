@@ -20,8 +20,8 @@ def test_header_alias() -> None:
 
 
 def test_media_type_alias() -> None:
-    media_type_1 = MediaType(media_type_schema=Schema())
-    media_type_2 = MediaType.parse_obj({"media_type_schema": Schema()})
+    media_type_1 = MediaType(schema=Schema())
+    media_type_2 = MediaType.parse_obj({"schema": Schema()})
     media_type_3 = MediaType.parse_obj({"schema": Schema()})
     assert media_type_1 == media_type_2 == media_type_3
 

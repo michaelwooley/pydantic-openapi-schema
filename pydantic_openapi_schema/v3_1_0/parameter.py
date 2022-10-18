@@ -1,7 +1,9 @@
 import enum
 from typing import Any, Dict, Optional, Union
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import Extra, Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .example import Example
 from .media_type import MediaType
@@ -18,7 +20,7 @@ class ParameterLocation(str, enum.Enum):
     COOKIE = "cookie"
 
 
-class Parameter(BaseModel):
+class Parameter(PackageBaseModel):
     """Describes a single operation parameter.
 
     A unique parameter is defined by a combination of a [name](https://spec.openapis.org/oas/v3.1.0#parameterName) and [location](https://spec.openapis.org/oas/v3.1.0#parameterIn).
@@ -136,7 +138,7 @@ class Parameter(BaseModel):
     the example MUST follow the prescribed serialization strategy for the parameter.
     """
 
-    content: Optional[Dict[str, MediaType]] = None
+    content: Optional[Dict[str, MediaType]] = Field(default_factory=dict)
     """
     A map containing the representations for the parameter.
     The key is the media type and the value describes it.

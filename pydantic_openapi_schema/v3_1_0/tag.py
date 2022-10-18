@@ -1,11 +1,13 @@
 from typing import Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .external_documentation import ExternalDocumentation
 
 
-class Tag(BaseModel):
+class Tag(PackageBaseModel):
     """Adds metadata to a single tag that is used by the [Operation
     Object](https://spec.openapis.org/oas/v3.1.0#operationObject).
 

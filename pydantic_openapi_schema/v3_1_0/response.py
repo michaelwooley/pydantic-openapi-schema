@@ -1,6 +1,8 @@
 from typing import Dict, Optional, Union
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .header import Header
 from .link import Link
@@ -8,7 +10,7 @@ from .media_type import MediaType
 from .reference import Reference
 
 
-class Response(BaseModel):
+class Response(PackageBaseModel):
     """Describes a single response from an API Operation, including design-
     time, static `links` to operations based on the response."""
 

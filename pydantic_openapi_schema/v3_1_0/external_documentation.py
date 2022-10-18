@@ -1,9 +1,11 @@
 from typing import Optional
 
-from pydantic import AnyUrl, BaseModel, Extra
+from pydantic import AnyUrl, Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class ExternalDocumentation(BaseModel):
+class ExternalDocumentation(PackageBaseModel):
     """Allows referencing an external resource for extended documentation."""
 
     description: Optional[str] = None

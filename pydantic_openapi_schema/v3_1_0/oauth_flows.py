@@ -1,11 +1,13 @@
 from typing import Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .oauth_flow import OAuthFlow
 
 
-class OAuthFlows(BaseModel):
+class OAuthFlows(PackageBaseModel):
     """Allows configuration of the supported OAuth Flows."""
 
     implicit: Optional[OAuthFlow] = None

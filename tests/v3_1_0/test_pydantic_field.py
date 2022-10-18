@@ -1,8 +1,9 @@
 from typing import Union
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 from typing_extensions import Literal
 
+from pydantic_openapi_schema.base import PackageBaseModel
 from pydantic_openapi_schema.utils.utils import (
     OpenAPI310PydanticSchema,
     construct_open_api_with_schema_class,
@@ -50,9 +51,7 @@ def construct_base_open_api() -> OpenAPI:
                 post=Operation(
                     requestBody=RequestBody(
                         content={
-                            "application/json": MediaType(
-                                media_type_schema=OpenAPI310PydanticSchema(schema_class=RequestModel)
-                            )
+                            "application/json": MediaType(schema=OpenAPI310PydanticSchema(schema_class=RequestModel))
                         }
                     ),
                     responses={"200": Response(description="pong")},
@@ -62,13 +61,13 @@ def construct_base_open_api() -> OpenAPI:
     )
 
 
-class DataAModel(BaseModel):
+class DataAModel(PackageBaseModel):
     kind: Literal["a"]
 
 
-class DataBModel(BaseModel):
+class DataBModel(PackageBaseModel):
     kind: Literal["b"]
 
 
-class RequestModel(BaseModel):
+class RequestModel(PackageBaseModel):
     data: Union[DataAModel, DataBModel] = Field(discriminator="kind")

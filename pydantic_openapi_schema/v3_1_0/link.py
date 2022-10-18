@@ -1,11 +1,13 @@
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .server import Server
 
 
-class Link(BaseModel):
+class Link(PackageBaseModel):
     """The `Link object` represents a possible design-time link for a response.
     The presence of a link does not guarantee the caller's ability to
     successfully invoke it, rather it provides a known relationship and

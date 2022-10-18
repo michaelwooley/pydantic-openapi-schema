@@ -1,5 +1,8 @@
-from pydantic import BaseModel, Field
+import json
 
+from pydantic import Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 from pydantic_openapi_schema.utils.utils import (
     OpenAPI310PydanticSchema,
     construct_open_api_with_schema_class,
@@ -17,21 +20,21 @@ from tests.v3_1_0.utils import PingRequest as OtherPingRequest
 from tests.v3_1_0.utils import PingResponse as OtherPingResponse
 
 
-class PingRequest(BaseModel):
+class PingRequest(PackageBaseModel):
     """Ping Request."""
 
     req_foo: str = Field(description="foo value of the request")
     req_bar: str = Field(description="bar value of the request")
 
 
-class PingResponse(BaseModel):
+class PingResponse(PackageBaseModel):
     """Ping response."""
 
     resp_foo: str = Field(description="foo value of the response")
     resp_bar: str = Field(description="bar value of the response")
 
 
-class PongResponse(BaseModel):
+class PongResponse(PackageBaseModel):
     """Pong response."""
 
     resp_foo: str = Field(alias="pong_foo", description="foo value of the response")
@@ -64,28 +67,25 @@ def test_construct_open_api_parse_obj() -> None:
         }
     )
     result = construct_open_api_with_schema_class(open_api)
-    assert result.dict(exclude_none=True) == {
+
+    assert json.loads(result.json(exclude_none=True, exclude_defaults=False, exclude_unset=True, by_alias=True)) == {
         "openapi": "3.1.0",
         "info": {"title": "My own API", "version": "v0.0.1"},
-        "servers": [{"url": "/"}],
+        # "servers": [],
         "paths": {
             "/ping": {
                 "post": {
                     "requestBody": {
-                        "content": {
-                            "application/json": {"media_type_schema": {"ref": "#/components/schemas/PingRequest"}}
-                        },
-                        "required": False,
+                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PingRequest"}}},
+                        # "required": False,
                     },
                     "responses": {
                         "200": {
                             "description": "pong",
-                            "content": {
-                                "application/json": {"media_type_schema": {"ref": "#/components/schemas/PingResponse"}}
-                            },
+                            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PingResponse"}}},
                         }
                     },
-                    "deprecated": False,
+                    # "deprecated": False,
                 }
             }
         },
@@ -127,9 +127,7 @@ def test_construct_open_api_with_schema_class() -> None:
                 post=Operation(
                     requestBody=RequestBody(
                         content={
-                            "application/json": MediaType(
-                                media_type_schema=OpenAPI310PydanticSchema(schema_class=PingRequest)
-                            )
+                            "application/json": MediaType(schema=OpenAPI310PydanticSchema(schema_class=PingRequest))
                         }
                     ),
                     responses={
@@ -137,39 +135,35 @@ def test_construct_open_api_with_schema_class() -> None:
                             description="pong",
                             content={
                                 "application/json": MediaType(
-                                    media_type_schema=OpenAPI310PydanticSchema(schema_class=PongResponse)
+                                    schema=OpenAPI310PydanticSchema(schema_class=PongResponse)
                                 )
                             },
                         )
                     },
-                )
+                )  # type: ignore
             )
         },
     )
 
     result = construct_open_api_with_schema_class(open_api)
-    assert result.dict(exclude_none=True) == {
+    assert json.loads(result.json(exclude_none=True, exclude_defaults=False, exclude_unset=True, by_alias=True)) == {
         "openapi": "3.1.0",
         "info": {"title": "My own API", "version": "v0.0.1"},
-        "servers": [{"url": "/"}],
+        # "servers": [],
         "paths": {
             "/ping": {
                 "post": {
                     "requestBody": {
-                        "content": {
-                            "application/json": {"media_type_schema": {"ref": "#/components/schemas/PingRequest"}}
-                        },
-                        "required": False,
+                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PingRequest"}}},
+                        # "required": False,
                     },
                     "responses": {
                         "200": {
                             "description": "pong",
-                            "content": {
-                                "application/json": {"media_type_schema": {"ref": "#/components/schemas/PongResponse"}}
-                            },
+                            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PongResponse"}}},
                         }
                     },
-                    "deprecated": False,
+                    # "deprecated": False,
                 }
             }
         },
@@ -212,7 +206,7 @@ def test_handling_of_models_with_same_name() -> None:
                     requestBody=RequestBody(
                         content={
                             "application/json": MediaType(
-                                media_type_schema=OpenAPI310PydanticSchema(schema_class=PingRequest)
+                                media_type_schema=OpenAPI310PydanticSchema(schema_class=PingRequest)  # type: ignore
                             )
                         }
                     ),
@@ -221,19 +215,19 @@ def test_handling_of_models_with_same_name() -> None:
                             description="pong",
                             content={
                                 "application/json": MediaType(
-                                    media_type_schema=OpenAPI310PydanticSchema(schema_class=PingResponse)
+                                    media_type_schema=OpenAPI310PydanticSchema(schema_class=PingResponse)  # type: ignore
                                 )
                             },
                         )
                     },
-                )
+                )  # type: ignore
             ),
             "/ping2": PathItem(
                 post=Operation(
                     requestBody=RequestBody(
                         content={
                             "application/json": MediaType(
-                                media_type_schema=OpenAPI310PydanticSchema(schema_class=OtherPingRequest)
+                                schema=OpenAPI310PydanticSchema(schema_class=OtherPingRequest)
                             )
                         }
                     ),
@@ -242,7 +236,7 @@ def test_handling_of_models_with_same_name() -> None:
                             description="pong",
                             content={
                                 "application/json": MediaType(
-                                    media_type_schema=OpenAPI310PydanticSchema(schema_class=OtherPingResponse)
+                                    schema=OpenAPI310PydanticSchema(schema_class=OtherPingResponse)
                                 )
                             },
                         )
@@ -252,51 +246,43 @@ def test_handling_of_models_with_same_name() -> None:
         },
     )
     result = construct_open_api_with_schema_class(open_api)
-    assert result.dict(exclude_none=True) == {
+    assert json.loads(result.json(exclude_none=True, exclude_defaults=False, exclude_unset=True, by_alias=True)) == {
         "openapi": "3.1.0",
         "info": {"title": "My own API", "version": "v0.0.1"},
-        "servers": [{"url": "/"}],
+        # "servers": [],
         "paths": {
             "/ping1": {
                 "post": {
                     "requestBody": {
-                        "content": {
-                            "application/json": {"media_type_schema": {"ref": "#/components/schemas/PingRequest"}}
-                        },
-                        "required": False,
+                        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PingRequest"}}},
+                        # "required": False,
                     },
                     "responses": {
                         "200": {
                             "description": "pong",
-                            "content": {
-                                "application/json": {"media_type_schema": {"ref": "#/components/schemas/PingResponse"}}
-                            },
+                            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PingResponse"}}},
                         }
                     },
-                    "deprecated": False,
+                    # "deprecated": False,
                 }
             },
             "/ping2": {
                 "post": {
                     "requestBody": {
                         "content": {
-                            "application/json": {
-                                "media_type_schema": {"ref": "#/components/schemas/RenamedPingRequest"}
-                            }
+                            "application/json": {"schema": {"$ref": "#/components/schemas/RenamedPingRequest"}}
                         },
-                        "required": False,
+                        # "required": False,
                     },
                     "responses": {
                         "200": {
                             "description": "pong",
                             "content": {
-                                "application/json": {
-                                    "media_type_schema": {"ref": "#/components/schemas/RenamedPingResponse"}
-                                }
+                                "application/json": {"schema": {"$ref": "#/components/schemas/RenamedPingResponse"}}
                             },
                         }
                     },
-                    "deprecated": False,
+                    # "deprecated": False,
                 }
             },
         },

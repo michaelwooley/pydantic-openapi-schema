@@ -1,7 +1,8 @@
 from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import Extra, Field
 
+from pydantic_openapi_schema.base import PackageBaseModel
 from pydantic_openapi_schema.v3_1_0.datatype import DataType
 
 from .discriminator import Discriminator
@@ -10,7 +11,7 @@ from .reference import Reference
 from .xml import XML
 
 
-class Schema(BaseModel):
+class Schema(PackageBaseModel):
     """The Schema Object allows the definition of input and output data types.
     These types can be objects, but also primitives and arrays. This object is
     a superset of the [JSON Schema Specification Draft
@@ -30,7 +31,7 @@ class Schema(BaseModel):
     and follow the same specifications:
     """
 
-    allOf: Optional[List[Union[Reference, "Schema"]]] = None
+    allOf: Union[None, List[Reference], List["Schema"]] = None
     """
     This keyword's value MUST be a non-empty array.  Each item of the
     array MUST be a valid JSON Schema.
@@ -40,7 +41,7 @@ class Schema(BaseModel):
     value.
     """
 
-    anyOf: Optional[List[Union[Reference, "Schema"]]] = None
+    anyOf: Union[None, List[Reference], List["Schema"]] = None
     """
     This keyword's value MUST be a non-empty array.  Each item of the
     array MUST be a valid JSON Schema.
@@ -52,7 +53,7 @@ class Schema(BaseModel):
     each subschema that validates successfully.
     """
 
-    oneOf: Optional[List[Union[Reference, "Schema"]]] = None
+    oneOf: Union[None, List[Reference], List["Schema"]] = None
     """
     This keyword's value MUST be a non-empty array.  Each item of the
     array MUST be a valid JSON Schema.
@@ -135,7 +136,7 @@ class Schema(BaseModel):
     Omitting this keyword has the same behavior as an empty object.
     """
 
-    prefixItems: Optional[List[Union[Reference, "Schema"]]] = None
+    prefixItems: Union[None, List[Reference], List["Schema"]] = None
     """
     The value of "prefixItems" MUST be a non-empty array of valid JSON
     Schemas.

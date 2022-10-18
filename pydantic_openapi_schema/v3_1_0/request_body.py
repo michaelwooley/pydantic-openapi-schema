@@ -1,11 +1,13 @@
 from typing import Dict, Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .media_type import MediaType
 
 
-class RequestBody(BaseModel):
+class RequestBody(PackageBaseModel):
     """Describes a single request body."""
 
     description: Optional[str] = None

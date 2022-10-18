@@ -1,9 +1,11 @@
 from typing import Dict, Optional, Union
 
-from pydantic import AnyUrl, BaseModel, Extra
+from pydantic import AnyUrl, Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class OAuthFlow(BaseModel):
+class OAuthFlow(PackageBaseModel):
     """Configuration details for a supported OAuth Flow."""
 
     authorizationUrl: Optional[Union[AnyUrl, str]] = None

@@ -75,21 +75,21 @@ def extract_pydantic_types_to_openapi_components(obj: Any, ref_class: Type[v3_1_
         for field in fields:
             child_obj = getattr(obj, field)
             if isinstance(child_obj, OpenAPI310PydanticSchema):
-                setattr(obj, field, ref_class(ref=create_ref_prefix(child_obj.schema_class)))
+                setattr(obj, field, ref_class(ref=create_ref_prefix(child_obj.schema_class)))  # type: ignore
                 pydantic_schemas.add(child_obj.schema_class)
             else:
                 pydantic_schemas.update(extract_pydantic_types_to_openapi_components(child_obj, ref_class=ref_class))
     elif isinstance(obj, list):
         for index, elem in enumerate(obj):
             if isinstance(elem, OpenAPI310PydanticSchema):
-                obj[index] = ref_class(ref=create_ref_prefix(elem.schema_class))
+                obj[index] = ref_class(ref=create_ref_prefix(elem.schema_class))  # type: ignore
                 pydantic_schemas.add(elem.schema_class)
             else:
                 pydantic_schemas.update(extract_pydantic_types_to_openapi_components(elem, ref_class=ref_class))
     elif isinstance(obj, dict):
         for key, value in obj.items():
             if isinstance(value, OpenAPI310PydanticSchema):
-                obj[key] = ref_class(ref=create_ref_prefix(value.schema_class))
+                obj[key] = ref_class(ref=create_ref_prefix(value.schema_class))  # type: ignore
                 pydantic_schemas.add(value.schema_class)
             else:
                 pydantic_schemas.update(extract_pydantic_types_to_openapi_components(value, ref_class=ref_class))

@@ -1,11 +1,13 @@
 from typing import Dict, Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .server_variable import ServerVariable
 
 
-class Server(BaseModel):
+class Server(PackageBaseModel):
     """An object representing a Server."""
 
     url: str

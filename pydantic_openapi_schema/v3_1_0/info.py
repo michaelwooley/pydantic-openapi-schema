@@ -1,12 +1,14 @@
 from typing import Optional
 
-from pydantic import AnyUrl, BaseModel, Extra
+from pydantic import AnyUrl, Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .contact import Contact
 from .license import License
 
 
-class Info(BaseModel):
+class Info(PackageBaseModel):
     """The object provides metadata about the API.
 
     The metadata MAY be used by the clients if needed, and MAY be

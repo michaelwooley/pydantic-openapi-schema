@@ -1,9 +1,11 @@
 from typing import Any, Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 
-class Example(BaseModel):
+class Example(PackageBaseModel):
 
     summary: Optional[str] = None
     """

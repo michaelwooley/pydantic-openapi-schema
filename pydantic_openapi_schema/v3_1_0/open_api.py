@@ -1,6 +1,8 @@
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, Extra
+from pydantic import Extra, Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .components import Components
 from .external_documentation import ExternalDocumentation
@@ -13,10 +15,10 @@ from .server import Server
 from .tag import Tag
 
 
-class OpenAPI(BaseModel):
+class OpenAPI(PackageBaseModel):
     """This is the root document object of the OpenAPI document."""
 
-    openapi: str = "3.1.0"
+    openapi: Literal["3.1.0"] = Field("3.1.0", const=True)
     """
     **REQUIRED**. This string MUST be the [version number](https://spec.openapis.org/oas/v3.1.0#versions)
     of the OpenAPI Specification that the OpenAPI document uses.
@@ -29,13 +31,13 @@ class OpenAPI(BaseModel):
     **REQUIRED**. Provides metadata about the API. The metadata MAY be used by tooling as required.
     """
 
-    jsonSchemaDialect: Optional[str] = None
+    json_schema_dialect: Optional[str] = Field(None, alias="jsonSchemaDialect")
     """
     The default value for the `$schema` keyword within [Schema Objects](https://spec.openapis.org/oas/v3.1.0#schemaObject)
     contained within this OAS document. This MUST be in the form of a URI.
     """
 
-    servers: List[Server] = [Server(url="/")]
+    servers: List[Server] = Field(default_factory=list)
     """
     An array of Server Objects, which provide connectivity information to a target server.
     If the `servers` property is not provided, or is an empty array,
@@ -43,12 +45,13 @@ class OpenAPI(BaseModel):
     with a [url](https://spec.openapis.org/oas/v3.1.0#serverUrl) value of `/`.
     """
 
-    paths: Optional[Paths] = None
+    # paths: Optional[Paths] = None
+    paths: Paths = Field(default_factory=dict)
     """
     The available paths and operations for the API.
     """
 
-    webhooks: Optional[Dict[str, Union[PathItem, Reference]]] = None
+    webhooks: Dict[str, Union[PathItem, Reference]] = Field(default_factory=dict)
     """
     The incoming webhooks that MAY be received as part of this API and that the API consumer MAY choose to implement.
     Closely related to the `callbacks` feature, this section describes requests initiated other than by an API call,
@@ -64,7 +67,7 @@ class OpenAPI(BaseModel):
     An element to hold various schemas for the document.
     """
 
-    security: Optional[List[SecurityRequirement]] = None
+    security: List[SecurityRequirement] = Field(default_factory=list)
     """
     A declaration of which security mechanisms can be used across the API.
     The list of values includes alternative security requirement objects that can be used.
@@ -82,10 +85,16 @@ class OpenAPI(BaseModel):
     Each tag name in the list MUST be unique.
     """
 
-    externalDocs: Optional[ExternalDocumentation] = None
+    external_docs: Optional[ExternalDocumentation] = Field(None, alias="externalDocs")
     """
     Additional external documentation.
     """
 
+    def __init__(self, **data):
+        if "openapi" not in data:
+            data["openapi"] = self.__fields__["openapi"].default
+        super().__init__(**data)
+
     class Config:
         extra = Extra.ignore
+        allow_population_by_field_name = True

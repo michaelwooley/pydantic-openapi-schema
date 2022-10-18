@@ -1,6 +1,8 @@
 from typing import Any, Dict, Optional, Union
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import Extra, Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .encoding import Encoding
 from .example import Example
@@ -8,7 +10,7 @@ from .reference import Reference
 from .schema import Schema
 
 
-class MediaType(BaseModel):
+class MediaType(PackageBaseModel):
     """Each Media Type Object provides schema and examples for the media type
     identified by its key."""
 

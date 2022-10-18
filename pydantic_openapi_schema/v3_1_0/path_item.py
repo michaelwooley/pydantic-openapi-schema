@@ -1,6 +1,8 @@
 from typing import List, Optional, Union
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import Extra, Field
+
+from pydantic_openapi_schema.base import PackageBaseModel
 
 from .operation import Operation
 from .parameter import Parameter
@@ -8,7 +10,7 @@ from .reference import Reference
 from .server import Server
 
 
-class PathItem(BaseModel):
+class PathItem(PackageBaseModel):
     """Describes the operations available on a single path.
 
     A Path Item MAY be empty, due to [ACL constraints](https://spec.openapis.org/oas/v3.1.0#securityFiltering).
