@@ -1,7 +1,7 @@
 from pydantic import Extra, Field
 from typing_extensions import Literal
 
-from .parameter import Parameter
+from .parameter import Parameter, ParameterLocation
 
 
 class Header(Parameter):
@@ -16,7 +16,7 @@ class Header(Parameter):
     """
 
     name: Literal[""] = Field(default="", const=True)
-    param_in: Literal["header"] = Field(default="header", const=True, alias="in")
+    param_in: ParameterLocation = Field(default=ParameterLocation.HEADER, const=True, alias="in")
 
     class Config:
         extra = Extra.ignore

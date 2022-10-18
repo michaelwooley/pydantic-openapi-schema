@@ -2,6 +2,8 @@ from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, Extra, Field
 
+from pydantic_openapi_schema.v3_1_0.datatype import DataType
+
 from .discriminator import Discriminator
 from .external_documentation import ExternalDocumentation
 from .reference import Reference
@@ -354,7 +356,7 @@ class Schema(BaseModel):
     and follow the same specifications:
     """
 
-    type: Optional[Union[str, List[str]]] = None
+    type: Optional[Union[DataType, List[DataType]]] = None
     """
     The value of this keyword MUST be either a string or an array.  If it
     is an array, elements of the array MUST be strings and MUST be

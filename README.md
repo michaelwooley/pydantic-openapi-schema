@@ -1,5 +1,10 @@
 # Pydantic OpenAPI Schema
 
+**UPDATED WITH:** [!13](https://github.com/kuimono/openapi-schema-pydantic/pull/13) [!15](https://github.com/kuimono/openapi-schema-pydantic/pull/15)
+
+---
+
+
 <!-- markdownlint-disable -->
 <img alt="Starlite logo" src="./docs/images/starlite-banner.svg" width="100%" height="auto">
 <!-- markdownlint-restore -->

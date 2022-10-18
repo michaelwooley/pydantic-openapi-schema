@@ -21,7 +21,7 @@ from .oauth_flow import OAuthFlow
 from .oauth_flows import OAuthFlows
 from .open_api import OpenAPI
 from .operation import Operation
-from .parameter import Parameter
+from .parameter import Parameter, ParameterLocation
 from .path_item import PathItem
 from .paths import Paths
 from .reference import Reference

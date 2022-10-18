@@ -2,6 +2,7 @@ from pydantic_openapi_schema.v3_1_0 import (
     Header,
     MediaType,
     Parameter,
+    ParameterLocation,
     PathItem,
     Reference,
     Schema,
@@ -10,10 +11,12 @@ from pydantic_openapi_schema.v3_1_0 import (
 
 
 def test_header_alias() -> None:
-    header_1 = Header(param_in="header")
+    header_1 = Header(param_in=ParameterLocation.HEADER)
     header_2 = Header.parse_obj({"param_in": "header"})
     header_3 = Header.parse_obj({"in": "header"})
     assert header_1 == header_2 == header_3
+    header_4 = Header.parse_obj({"in": ParameterLocation.HEADER})
+    assert header_1 == header_2 == header_3 == header_4
 
 
 def test_media_type_alias() -> None:
@@ -28,6 +31,12 @@ def test_parameter_alias() -> None:
     parameter_2 = Parameter.parse_obj({"name": "test", "param_in": "path", "param_schema": Schema()})
     parameter_3 = Parameter.parse_obj({"name": "test", "in": "path", "schema": Schema()})
     assert parameter_1 == parameter_2 == parameter_3
+
+
+def test_parameter_param_in() -> None:
+    pl = ParameterLocation.HEADER
+    header_1 = Parameter(name="test", param_in=pl, param_schema=Schema())
+    assert header_1.param_in == pl
 
 
 def test_path_item_alias() -> None:
